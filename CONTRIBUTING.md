@@ -1,10 +1,10 @@
-# Contributing to Documenso
+# Contributing to SignFlow
 
 > **We are no longer accepting external pull requests.**
 >
-> Aside from a small group of trusted contributors we reach out to directly, we no longer merge external PRs. New pull requests will usually be closed with a request to open an issue instead. This is a security decision, not a judgement on your work. Read [Why We're Pausing External Pull Requests](https://documenso.com/blog/why-we-re-pausing-external-pull-requests) for the full reasoning.
+> Aside from a small group of trusted contributors we reach out to directly, we no longer merge external PRs. New pull requests will usually be closed with a request to open an issue instead. This is a security decision, not a judgement on your work.
 >
-> Documenso stays open source. You can still read, audit, run, and fork the code. The best way to contribute is through detailed issues.
+> SignFlow is open source under AGPL-3.0. You can still read, audit, run, and fork the code. The best way to contribute is through detailed issues.
 
 ## How to contribute now
 
@@ -15,13 +15,13 @@ The most useful contribution is a detailed issue. Treat it like a spec. The more
 - Edge cases, constraints, and anything you've already considered
 - Examples, mockups, or references where they help
 
-Before opening an issue, search [existing issues](https://github.com/documenso/documenso/issues) and [discussions](https://github.com/documenso/documenso/discussions) for related items. If a proposal is detailed and fits where Documenso is heading, we'll pick it up and build against it.
+Before opening an issue, search existing issues and discussions for related items. If a proposal is detailed and fits where SignFlow is heading, we'll pick it up and build against it.
 
 For security vulnerabilities, do not open a public issue. Follow our [Security Policy](./SECURITY.md) instead.
 
 ---
 
-The sections below are for trusted contributors working with us directly, and for anyone running Documenso locally or maintaining a fork.
+The sections below are for trusted contributors working with us directly, and for anyone running SignFlow locally or maintaining a fork.
 
 ## English only PRs and Issues
 
@@ -45,20 +45,16 @@ Always feel free to ask questions or seek clarification on the issue.
 
 ## Developing
 
-The development branch is <code>main</code>. All pull requests should be made against this branch. If you need help getting started, [join us on Discord](https://documen.so/discord).
+The development branch is <code>main</code>. All pull requests should be made against this branch.
 
-1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your
-   own GitHub account and then
-   [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device.
+1. Fork this repository to your own GitHub account and then clone it to your local device.
 2. Create a new branch:
 
-- Create a new branch (include the issue id and something readable):
+   ```sh
+   git checkout -b feat/somefeature-that-rocks
+   ```
 
-  ```sh
-  git checkout -b feat/doc-999-somefeature-that-rocks
-  ```
-
-3. See the [Developer Setup](https://github.com/documenso/documenso/blob/main/README.md#developer-setup) for more setup details.
+3. See the [Local Quickstart](./README.md#live-demo--local-quickstart) in the root README for more setup details.
 
 ## Building
 
