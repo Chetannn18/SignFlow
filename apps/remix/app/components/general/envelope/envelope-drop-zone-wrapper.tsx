@@ -16,13 +16,16 @@ import { useToast } from '@documenso/ui/primitives/use-toast';
 import { plural } from '@lingui/core/macro';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { EnvelopeType } from '@prisma/client';
-import { Loader } from 'lucide-react';
-import { type ReactNode, useState } from 'react';
+import { Loader, UploadCloudIcon } from 'lucide-react';
+import { createContext, type ReactNode, useContext, useState } from 'react';
 import { ErrorCode as DropzoneErrorCode, type FileRejection, useDropzone } from 'react-dropzone';
 import { Link, useNavigate, useParams } from 'react-router';
 
 import { useCurrentTeam } from '~/providers/team';
 import { getUploadErrorMessage } from '~/utils/toast-error-messages';
+
+export const EnvelopeDropZoneContext = createContext<{ open: () => void }>({ open: () => {} });
+export const useEnvelopeDropZone = () => useContext(EnvelopeDropZoneContext);
 
 export interface EnvelopeDropZoneWrapperProps {
   children: ReactNode;
@@ -148,7 +151,7 @@ export const EnvelopeDropZoneWrapper = ({ children, type, className }: EnvelopeD
       variant: 'destructive',
     });
   };
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     accept: getAllowedUploadMimeTypes(),
     multiple: true,
     maxSize: megabytesToBytes(APP_DOCUMENT_UPLOAD_SIZE_LIMIT),
@@ -160,54 +163,68 @@ export const EnvelopeDropZoneWrapper = ({ children, type, className }: EnvelopeD
   });
 
   return (
-    <div {...getRootProps()} className={cn('relative min-h-screen', className)}>
-      <input {...getInputProps()} />
-      {children}
+    <EnvelopeDropZoneContext.Provider value={{ open }}>
+      <div {...getRootProps()} className={cn('relative min-h-screen', className)}>
+        <input {...getInputProps()} />
+        {children}
 
-      {isDragActive && (
-        <div className="fixed top-0 left-0 z-[9999] h-full w-full bg-muted/60 backdrop-blur-[4px]">
-          <div className="pointer-events-none flex h-full w-full flex-col items-center justify-center">
-            <h2 className="font-semibold text-2xl text-foreground">
-              {type === EnvelopeType.DOCUMENT ? <Trans>Upload Document</Trans> : <Trans>Upload Template</Trans>}
-            </h2>
+        {isDragActive && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-background/80 backdrop-blur-sm transition-all duration-200">
+            <div className="pointer-events-none mx-4 flex max-w-lg flex-col items-center justify-center rounded-2xl border-2 border-primary/60 border-dashed bg-card/95 p-10 text-center shadow-2xl">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <UploadCloudIcon className="h-8 w-8 animate-bounce" />
+              </div>
 
-            <p className="mt-4 text-base text-muted-foreground">
-              <Trans>Drag and drop your document here</Trans>
-            </p>
+              <h2 className="mt-5 font-semibold text-2xl text-foreground">
+                {type === EnvelopeType.DOCUMENT ? (
+                  <Trans>Upload Document to SignFlow</Trans>
+                ) : (
+                  <Trans>Upload Template to SignFlow</Trans>
+                )}
+              </h2>
 
-            {isUploadDisabled && IS_BILLING_ENABLED() && (
-              <Link
-                to={`/o/${organisation.url}/settings/billing`}
-                className="mt-4 text-amber-500 text-sm hover:underline dark:text-amber-400"
-              >
-                <Trans>Upgrade your plan to upload more documents</Trans>
-              </Link>
-            )}
+              <p className="mt-2 text-muted-foreground text-sm">
+                <Trans>Drop your PDF file here to immediately begin adding fields</Trans>
+              </p>
 
-            {!isUploadDisabled &&
-              team?.id === undefined &&
-              remaining.documents > 0 &&
-              Number.isFinite(remaining.documents) && (
-                <p className="mt-4 text-muted-foreground/80 text-sm">
-                  <Trans>
-                    {remaining.documents} of {quota.documents} documents remaining this month.
-                  </Trans>
-                </p>
+              <span className="mt-4 rounded-full bg-muted px-3 py-1 font-medium text-muted-foreground text-xs">
+                PDF up to {APP_DOCUMENT_UPLOAD_SIZE_LIMIT}MB
+              </span>
+
+              {isUploadDisabled && IS_BILLING_ENABLED() && (
+                <Link
+                  to={`/o/${organisation.url}/settings/billing`}
+                  className="pointer-events-auto mt-4 text-amber-500 text-sm hover:underline dark:text-amber-400"
+                >
+                  <Trans>Upgrade your plan to upload more documents</Trans>
+                </Link>
               )}
-          </div>
-        </div>
-      )}
 
-      {isLoading && (
-        <div className="absolute inset-0 z-50 bg-muted/30 backdrop-blur-[2px]">
-          <div className="pointer-events-none flex h-1/2 w-full flex-col items-center justify-center">
-            <Loader className="h-12 w-12 animate-spin text-primary" />
-            <p className="mt-8 font-medium text-foreground">
-              <Trans>Uploading</Trans>
-            </p>
+              {!isUploadDisabled &&
+                team?.id === undefined &&
+                remaining.documents > 0 &&
+                Number.isFinite(remaining.documents) && (
+                  <p className="mt-4 text-muted-foreground/80 text-sm">
+                    <Trans>
+                      {remaining.documents} of {quota.documents} documents remaining this month.
+                    </Trans>
+                  </p>
+                )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+
+        {isLoading && (
+          <div className="absolute inset-0 z-50 bg-muted/30 backdrop-blur-[2px]">
+            <div className="pointer-events-none flex h-1/2 w-full flex-col items-center justify-center">
+              <Loader className="h-12 w-12 animate-spin text-primary" />
+              <p className="mt-8 font-medium text-foreground">
+                <Trans>Uploading</Trans>
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </EnvelopeDropZoneContext.Provider>
   );
 };

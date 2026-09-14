@@ -1,7 +1,7 @@
 services:
   - type: web
     runtime: node
-    name: documenso-app
+    name: signflow-app
     plan: free
     buildCommand: npm i && npm run build
     startCommand: npx prisma migrate deploy --schema packages/prisma/schema.prisma && npx turbo run start --filter=@documenso/remix
@@ -15,10 +15,14 @@ services:
       - key: PORT
         value: 10000
 
+      # Telemetry
+      - key: DOCUMENSO_DISABLE_TELEMETRY
+        value: 'true'
+
       # Auth
       - key: NEXTAUTH_URL
         fromService:
-          name: documenso-app
+          name: signflow-app
           type: web
           envVarKey: RENDER_EXTERNAL_URL
       - key: NEXTAUTH_SECRET
@@ -27,18 +31,18 @@ services:
       # Database
       - key: NEXT_PRIVATE_DATABASE_URL
         fromDatabase:
-          name: documenso-db
+          name: signflow-db
           property: connectionString
 
       - key: NEXT_PRIVATE_DIRECT_DATABASE_URL
         fromDatabase:
-          name: documenso-db
+          name: signflow-db
           property: connectionString
 
       # URLs
       - key: NEXT_PUBLIC_WEBAPP_URL
         fromService:
-          name: documenso-app
+          name: signflow-app
           type: web
           envVarKey: RENDER_EXTERNAL_URL
       - key: NEXT_PRIVATE_INTERNAL_WEBAPP_URL
@@ -179,5 +183,5 @@ services:
         sync: false
 
 databases:
-  - name: documenso-db
+  - name: signflow-db
     plan: free

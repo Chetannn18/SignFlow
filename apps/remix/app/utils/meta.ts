@@ -47,7 +47,7 @@ export const appMetaTags = (title?: MessageDescriptor) => {
     },
     {
       name: 'twitter:site',
-      content: '@documenso',
+      content: '@SignFlow',
     },
     {
       name: 'twitter:description',

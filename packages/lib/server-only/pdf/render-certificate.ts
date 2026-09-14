@@ -573,7 +573,7 @@ const renderBranding = async ({ qrToken, i18n }: { qrToken: string | null; i18n:
   const text = new Konva.Text({
     x: 0,
     verticalAlign: 'middle',
-    text: i18n._(msg`Signing certificate provided by`) + ':',
+    text: i18n._(msg`Signing certificate provided by SignFlow`) + ':',
     fontStyle: fontMedium,
     fontFamily: 'Inter',
     fontSize: textSm,

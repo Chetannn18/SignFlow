@@ -103,12 +103,7 @@ export default function ApiTokensPage() {
         subtitle={
           <Trans>
             Create and manage API tokens. See our{' '}
-            <a
-              className="text-primary underline"
-              href={'https://docs.documenso.com/developers/public-api'}
-              target="_blank"
-              rel="noopener"
-            >
+            <a className="text-primary underline" href={'/api/v2/openapi.json'} target="_blank" rel="noopener">
               documentation
             </a>{' '}
             for more information.

@@ -11,7 +11,7 @@ import type { RowSelectionState } from '@documenso/ui/primitives/data-table';
 import { msg } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { EnvelopeType, FolderType, type DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
-import { XIcon } from 'lucide-react';
+import { UploadCloud, XIcon } from 'lucide-react';
 import { useQueryStates } from 'nuqs';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -24,7 +24,7 @@ import {
 } from '~/components/dialogs/envelopes-bulk-download-dialog';
 import { EnvelopesBulkMoveDialog } from '~/components/dialogs/envelopes-bulk-move-dialog';
 import { DocumentSearch } from '~/components/general/document/document-search';
-import { EnvelopeDropZoneWrapper } from '~/components/general/envelope/envelope-drop-zone-wrapper';
+import { EnvelopeDropZoneWrapper, useEnvelopeDropZone } from '~/components/general/envelope/envelope-drop-zone-wrapper';
 import { FolderGrid } from '~/components/general/folder/folder-grid';
 import { DocumentsTable } from '~/components/tables/documents-table';
 import { DocumentsTableEmptyState } from '~/components/tables/documents-table-empty-state';
@@ -180,15 +180,24 @@ export default function DocumentsPage() {
       <div className="mx-auto w-full max-w-screen-xl px-4 md:px-8">
         <FolderGrid type={FolderType.DOCUMENT} parentId={folderId ?? null} />
 
-        <div className="mt-8 flex flex-row items-center">
-          <Avatar className="mr-3 h-12 w-12 border-2 border-white border-solid dark:border-border">
-            {team.avatarImageId && <AvatarImage src={formatAvatarUrl(team.avatarImageId)} />}
-            <AvatarFallback className="text-muted-foreground text-xs">{team.name.slice(0, 1)}</AvatarFallback>
-          </Avatar>
+        <div className="mt-8 flex flex-row items-center justify-between gap-4">
+          <div className="flex flex-row items-center">
+            <Avatar className="mr-3 h-12 w-12 border-2 border-white border-solid dark:border-border">
+              {team.avatarImageId && <AvatarImage src={formatAvatarUrl(team.avatarImageId)} />}
+              <AvatarFallback className="text-muted-foreground text-xs">{team.name.slice(0, 1)}</AvatarFallback>
+            </Avatar>
 
-          <h2 className="font-semibold text-4xl">
-            <Trans>Documents</Trans>
-          </h2>
+            <div>
+              <h2 className="font-semibold text-3xl md:text-4xl">
+                <Trans>Documents</Trans>
+              </h2>
+              <p className="hidden text-muted-foreground text-sm sm:block">
+                <Trans>Track, sign, and distribute documents for signature</Trans>
+              </p>
+            </div>
+          </div>
+
+          <DocumentsCreateAction />
         </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-2 gap-y-4">
@@ -299,5 +308,21 @@ export default function DocumentsPage() {
         />
       </div>
     </EnvelopeDropZoneWrapper>
+  );
+}
+
+function DocumentsCreateAction() {
+  const { open: openUpload } = useEnvelopeDropZone();
+
+  return (
+    <Button onClick={openUpload} className="gap-2 shadow-sm">
+      <UploadCloud className="h-4 w-4" />
+      <span className="hidden sm:inline">
+        <Trans>Create Document</Trans>
+      </span>
+      <span className="sm:hidden">
+        <Trans>Upload</Trans>
+      </span>
+    </Button>
   );
 }

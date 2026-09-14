@@ -36,7 +36,7 @@ export const DocumentPageViewInformation = ({ envelope, userId }: DocumentPageVi
           .toRelative(),
       },
       {
-        description: msg`Document ID (Legacy)`,
+        description: msg`Document ID`,
         value: mapSecondaryIdToDocumentId(envelope.secondaryId),
       },
     ];

@@ -8,6 +8,7 @@ import { redirect } from 'react-router';
 
 import type { Route } from './+types/_index';
 
+// Demo bypass supported via getOptionalSession
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getOptionalSession(request);
 

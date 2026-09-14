@@ -1,6 +1,6 @@
 import { useCurrentOrganisation } from '@documenso/lib/client-only/providers/organisation';
 import { useSession } from '@documenso/lib/client-only/providers/session';
-import { IS_BILLING_ENABLED } from '@documenso/lib/constants/app';
+import { IS_BILLING_ENABLED, SUPPORT_EMAIL } from '@documenso/lib/constants/app';
 import { Button } from '@documenso/ui/primitives/button';
 import { msg } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
@@ -50,43 +50,27 @@ export default function SupportPage() {
           <div className="rounded-lg border p-4">
             <h2 className="flex items-center gap-2 font-bold text-lg">
               <BookIcon className="h-5 w-5 text-muted-foreground" />
-              <Link
-                to="https://docs.documenso.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                <Trans>Documentation</Trans>
+              <Link to="/api/v2/openapi.json" target="_blank" rel="noopener noreferrer" className="hover:underline">
+                <Trans>API Documentation</Trans>
               </Link>
             </h2>
             <p className="mt-1 text-muted-foreground">
-              <Trans>Read our documentation to get started with SignFlow.</Trans>
+              <Trans>Read our API documentation to get started with SignFlow integrations.</Trans>
             </p>
           </div>
           <div className="rounded-lg border p-4">
             <h2 className="flex items-center gap-2 font-bold text-lg">
               <Link2Icon className="h-5 w-5 text-muted-foreground" />
-              <Link
-                to="https://documen.so/discord"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                <Trans>Discord</Trans>
-              </Link>
+              <a href={`mailto:${SUPPORT_EMAIL}`} className="hover:underline">
+                <Trans>Email Support</Trans>
+              </a>
             </h2>
             <p className="mt-1 text-muted-foreground">
               <Trans>
-                Join our community on{' '}
-                <Link
-                  to="https://documen.so/discord"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline"
-                >
-                  Discord
-                </Link>{' '}
-                for community support and discussion.
+                Contact our support team directly at{' '}
+                <a href={`mailto:${SUPPORT_EMAIL}`} className="text-primary hover:underline">
+                  {SUPPORT_EMAIL}
+                </a>
               </Trans>
             </p>
           </div>

@@ -1,67 +1,91 @@
 import { ExtendedDocumentStatus } from '@documenso/prisma/types/extended-document-status';
+import { Button } from '@documenso/ui/primitives/button';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-import { Bird, CheckCircle2, TimerOff, XCircle } from 'lucide-react';
+import { Trans } from '@lingui/react/macro';
+import { CheckCircle2, FileText, TimerOff, UploadCloud, XCircle } from 'lucide-react';
 import { match } from 'ts-pattern';
+
+import { useEnvelopeDropZone } from '~/components/general/envelope/envelope-drop-zone-wrapper';
 
 export type DocumentsTableEmptyStateProps = { status: ExtendedDocumentStatus };
 
 export const DocumentsTableEmptyState = ({ status }: DocumentsTableEmptyStateProps) => {
   const { _ } = useLingui();
+  const { open: openUpload } = useEnvelopeDropZone();
 
   const {
     title,
     message,
     icon: Icon,
+    showUploadAction,
   } = match(status)
     .with(ExtendedDocumentStatus.COMPLETED, () => ({
-      title: msg`Nothing to do`,
-      message: msg`There are no completed documents yet. Documents that you have created or received will appear here once completed.`,
+      title: msg`No completed documents yet`,
+      message: msg`Documents that you send or receive will appear here once all signatures are collected.`,
       icon: CheckCircle2,
+      showUploadAction: false,
     }))
     .with(ExtendedDocumentStatus.DRAFT, () => ({
       title: msg`No active drafts`,
-      message: msg`There are no active drafts at the current moment. You can upload a document to start drafting.`,
-      icon: CheckCircle2,
+      message: msg`Upload a PDF document to begin adding signature fields, recipients, and custom settings.`,
+      icon: FileText,
+      showUploadAction: true,
     }))
     .with(ExtendedDocumentStatus.CANCELLED, () => ({
-      title: msg`Nothing cancelled`,
-      message: msg`There are no cancelled documents. Documents you cancel will remain here as a record that they were distributed.`,
+      title: msg`No cancelled documents`,
+      message: msg`Cancelled documents will remain archived here for audit trail compliance.`,
       icon: XCircle,
+      showUploadAction: false,
     }))
     .with(ExtendedDocumentStatus.REJECTED, () => ({
       title: msg`No rejected documents`,
-      message: msg`There are no rejected documents. Documents that a recipient declines to sign will appear here.`,
+      message: msg`Documents declined by any signer will appear here with signer feedback.`,
       icon: XCircle,
+      showUploadAction: false,
     }))
     .with(ExtendedDocumentStatus.EXPIRED, () => ({
       title: msg`No expired documents`,
-      message: msg`There are no documents with expired signing links. You can redistribute a document to renew its expiration.`,
+      message: msg`Documents with expired signing deadlines will be cataloged here.`,
       icon: TimerOff,
+      showUploadAction: false,
     }))
     .with(ExtendedDocumentStatus.ALL, () => ({
-      title: msg`We're all empty`,
-      message: msg`You have not yet created or received any documents. To create a document please upload one.`,
-      icon: Bird,
+      title: msg`Welcome to SignFlow`,
+      message: msg`You haven't uploaded any documents yet. Create your first document to experience effortless digital signing.`,
+      icon: UploadCloud,
+      showUploadAction: true,
     }))
     .otherwise(() => ({
-      title: msg`Nothing to do`,
-      message: msg`All documents have been processed. Any new documents that are sent or received will show here.`,
+      title: msg`All caught up`,
+      message: msg`All documents in this view have been processed. New activity will display here automatically.`,
       icon: CheckCircle2,
+      showUploadAction: false,
     }));
 
   return (
     <div
-      className="flex h-60 flex-col items-center justify-center gap-y-4 text-muted-foreground/60"
+      className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-border/60 border-dashed bg-card/40 p-8 text-center"
       data-testid="empty-document-state"
     >
-      <Icon className="h-12 w-12" strokeWidth={1.5} />
-
-      <div className="text-center">
-        <h3 className="font-semibold text-lg">{_(title)}</h3>
-
-        <p className="mt-2 max-w-[60ch]">{_(message)}</p>
+      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <Icon className="h-7 w-7" strokeWidth={1.75} />
       </div>
+
+      <div className="mt-4 max-w-[50ch]">
+        <h3 className="font-semibold text-foreground text-lg">{_(title)}</h3>
+        <p className="mt-2 text-muted-foreground text-sm leading-relaxed">{_(message)}</p>
+      </div>
+
+      {showUploadAction && (
+        <div className="mt-6 flex flex-col items-center gap-y-2">
+          <Button type="button" onClick={openUpload} className="gap-2 shadow-sm">
+            <UploadCloud className="h-4 w-4" />
+            <Trans>Upload & Sign Document</Trans>
+          </Button>
+          <p className="text-muted-foreground/60 text-xs">or drag and drop a PDF anywhere on this page</p>
+        </div>
+      )}
     </div>
   );
 };
