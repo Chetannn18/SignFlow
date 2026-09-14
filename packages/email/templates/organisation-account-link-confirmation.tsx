@@ -25,7 +25,7 @@ export const OrganisationAccountLinkConfirmationTemplate = ({
   const previewText =
     type === 'create'
       ? msg`A request has been made to create an account for you`
-      : msg`A request has been made to link your Documenso account`;
+      : msg`A request has been made to link your SignFlow account`;
 
   return (
     <Html>
@@ -46,7 +46,7 @@ export const OrganisationAccountLinkConfirmationTemplate = ({
                 {type === 'create' ? (
                   <Trans>Account creation request</Trans>
                 ) : (
-                  <Trans>Link your Documenso account</Trans>
+                  <Trans>Link your SignFlow account</Trans>
                 )}
               </Text>
 
@@ -58,7 +58,7 @@ export const OrganisationAccountLinkConfirmationTemplate = ({
                   </Trans>
                 ) : (
                   <Trans>
-                    <span className="font-bold">{organisationName}</span> has requested to link your current Documenso
+                    <span className="font-bold">{organisationName}</span> has requested to link your current SignFlow
                     account to their organisation.
                   </Trans>
                 )}

@@ -34,7 +34,7 @@ export const TemplateFooter = ({ isDocument = true, reportUrl }: TemplateFooterP
           <Trans>
             This document was sent using{' '}
             <Link className="text-primary" href="https://documen.so/mail-footer">
-              Documenso
+              SignFlow
             </Link>
             .
           </Trans>
@@ -62,13 +62,7 @@ export const TemplateFooter = ({ isDocument = true, reportUrl }: TemplateFooterP
         </Text>
       )}
 
-      {!branding.brandingEnabled && (
-        <Text className="my-8 text-muted-foreground text-sm">
-          Documenso, Inc.
-          <br />
-          2261 Market Street, #5211, San Francisco, CA 94114, USA
-        </Text>
-      )}
+      {!branding.brandingEnabled && <Text className="my-8 text-muted-foreground text-sm">SignFlow Technologies</Text>}
     </Section>
   );
 };

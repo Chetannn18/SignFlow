@@ -11,6 +11,7 @@ import { TemplateResetPassword } from '../template-components/template-reset-pas
 
 export type ResetPasswordTemplateProps = Partial<TemplateResetPasswordProps> & {
   source?: TPasswordChangeSource;
+  supportEmail?: string;
 };
 
 export const ResetPasswordTemplate = ({
@@ -18,6 +19,7 @@ export const ResetPasswordTemplate = ({
   userEmail = 'lucas@documenso.com',
   assetBaseUrl = 'http://localhost:3002',
   source = 'RESET',
+  supportEmail = 'support@documenso.com',
 }: ResetPasswordTemplateProps) => {
   const { _ } = useLingui();
 
@@ -58,7 +60,7 @@ export const ResetPasswordTemplate = ({
                   <Text className="mt-2 text-base text-muted-foreground">
                     <Trans>
                       Didn't request a password change? We are here to help you secure your account, just{' '}
-                      <Link className="font-normal text-primary" href="mailto:hi@documenso.com">
+                      <Link className="font-normal text-primary" href={`mailto:${supportEmail}`}>
                         contact us
                       </Link>
                       .
@@ -73,7 +75,7 @@ export const ResetPasswordTemplate = ({
                   <Text className="mt-2 text-base text-muted-foreground">
                     <Trans>
                       If this was you, no action is needed. If it wasn't, reset your password immediately and{' '}
-                      <Link className="font-normal text-primary" href="mailto:hi@documenso.com">
+                      <Link className="font-normal text-primary" href={`mailto:${supportEmail}`}>
                         contact us
                       </Link>
                       .
