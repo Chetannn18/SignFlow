@@ -13,17 +13,20 @@ export type TemplateBrandingLogoProps = {
  *
  * - When custom branding is enabled with a logo, the branding logo is shown.
  *   If a safe (http/https) Brand Website is configured, the logo links to it.
- * - Otherwise the Documenso logo is shown.
+ * - Otherwise the SignFlow logo is shown.
  */
-export const TemplateBrandingLogo = ({ assetBaseUrl, className = 'mb-4 h-6' }: TemplateBrandingLogoProps) => {
+export const TemplateBrandingLogo = ({
+  assetBaseUrl,
+  className = 'mx-auto mb-4 h-16 w-auto',
+}: TemplateBrandingLogoProps) => {
   const branding = useBranding();
 
   const hasCustomBrandingLogo = branding.brandingEnabled && Boolean(branding.brandingLogo);
 
   if (!hasCustomBrandingLogo) {
-    const documensoLogoUrl = getEmailAssetUrl(assetBaseUrl, 'static/logo.png');
+    const signFlowLogoUrl = getEmailAssetUrl(assetBaseUrl, 'static/logo.png');
 
-    return <Img src={documensoLogoUrl} alt="SignFlow Logo" className={className} />;
+    return <Img src={signFlowLogoUrl} alt="SignFlow Logo" className={className} />;
   }
 
   const brandingLogo = <Img src={branding.brandingLogo} alt="Branding Logo" className={className} />;

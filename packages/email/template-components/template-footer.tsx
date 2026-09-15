@@ -1,3 +1,4 @@
+import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
 import { Trans } from '@lingui/react/macro';
 import { Fragment } from 'react';
 
@@ -14,6 +15,7 @@ export const TemplateFooter = ({ isDocument = true, reportUrl }: TemplateFooterP
   const branding = useBranding();
 
   const safeBrandingUrl = branding.brandingEnabled ? getSafeBrandingUrl(branding.brandingUrl) : null;
+  const webappUrl = NEXT_PUBLIC_WEBAPP_URL();
 
   return (
     <Section>
@@ -33,7 +35,7 @@ export const TemplateFooter = ({ isDocument = true, reportUrl }: TemplateFooterP
         <Text className="my-4 text-base text-muted-foreground">
           <Trans>
             This document was sent using{' '}
-            <Link className="text-primary" href="https://documen.so/mail-footer">
+            <Link className="text-primary" href={webappUrl}>
               SignFlow
             </Link>
             .

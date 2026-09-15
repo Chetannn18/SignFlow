@@ -1,11 +1,13 @@
 import communityCardsImage from '@documenso/assets/images/community-cards.png';
 import { authClient } from '@documenso/auth/client';
 import { useAnalytics } from '@documenso/lib/client-only/hooks/use-analytics';
+import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { ZNameSchema } from '@documenso/lib/types/name';
 import { env } from '@documenso/lib/utils/env';
 import { zEmail } from '@documenso/lib/utils/zod';
 import { ZPasswordSchema } from '@documenso/trpc/server/auth-router/schema';
+import { VerifiedIcon } from '@documenso/ui/icons/verified';
 import { cn } from '@documenso/ui/lib/utils';
 import { Button } from '@documenso/ui/primitives/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@documenso/ui/primitives/form/form';
@@ -20,6 +22,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import type { TurnstileInstance } from '@marsidev/react-turnstile';
 import { Turnstile } from '@marsidev/react-turnstile';
+import { File } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaIdCardClip } from 'react-icons/fa6';
@@ -27,7 +30,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { z } from 'zod';
 
-import { UserProfileTimur } from '~/components/general/user-profile-timur';
+import { BrandingLogoIcon } from '~/components/general/branding-logo-icon';
 
 export const ZSignUpFormSchema = z
   .object({
@@ -221,11 +224,11 @@ export const SignUpForm = ({
 
         <div className="relative flex h-full w-full flex-col items-center justify-evenly">
           <div className="rounded-2xl border bg-background px-4 py-1 font-medium text-sm">
-            <Trans>User profiles are here!</Trans>
+            <Trans>Sign documents securely</Trans>
           </div>
 
           <div className="w-full max-w-md">
-            <UserProfileTimur rows={2} className="rounded-2xl border border-border bg-background shadow-md" />
+            <SignFlowShowcaseCard rows={2} className="rounded-2xl border border-border bg-background shadow-md" />
           </div>
 
           <div />
@@ -427,6 +430,72 @@ export const SignUpForm = ({
             .
           </Trans>
         </p>
+      </div>
+    </div>
+  );
+};
+
+type SignFlowShowcaseCardProps = {
+  className?: string;
+  rows?: number;
+};
+
+const SignFlowShowcaseCard = ({ className, rows = 2 }: SignFlowShowcaseCardProps) => {
+  const baseUrl = new URL(NEXT_PUBLIC_WEBAPP_URL() ?? 'http://localhost:3000');
+
+  return (
+    <div className={cn('flex flex-col items-center rounded-xl bg-neutral-100 p-4 dark:bg-background', className)}>
+      <div className="inline-block max-w-full truncate rounded-md border border-border bg-background px-2.5 py-1.5 text-muted-foreground text-sm">
+        {baseUrl.host}
+      </div>
+
+      <div className="mt-4 flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-background p-3.5 shadow-sm">
+        <BrandingLogoIcon className="h-full w-full text-primary" />
+      </div>
+
+      <div className="mt-6 text-center">
+        <div className="flex items-center justify-center gap-x-2">
+          <h2 className="font-semibold text-2xl">SignFlow Technologies</h2>
+
+          <VerifiedIcon className="h-7 w-7 text-primary" />
+        </div>
+
+        <p className="mt-3 max-w-[40ch] text-center text-muted-foreground text-sm">
+          <Trans>Secure, verified digital signing and document workflows</Trans>
+        </p>
+
+        <p className="mt-1 max-w-[40ch] text-center text-muted-foreground text-sm">
+          <Trans>Seamless signing experiences for modern businesses</Trans>
+        </p>
+      </div>
+
+      <div className="mt-8 w-full">
+        <div className="divide-y-2 divide-neutral-200 overflow-hidden rounded-lg border-2 border-neutral-200 dark:divide-foreground/30 dark:border-foreground/30">
+          <div className="bg-neutral-50 p-4 font-medium text-muted-foreground dark:bg-foreground/20">
+            <Trans>Documents</Trans>
+          </div>
+
+          {Array(rows)
+            .fill(0)
+            .map((_, index) => (
+              <div key={index} className="flex items-center justify-between gap-x-6 bg-background p-4">
+                <div className="flex items-center gap-x-2">
+                  <File className="h-8 w-8 text-muted-foreground/80" strokeWidth={1.5} />
+
+                  <div className="space-y-2">
+                    <div className="h-1.5 w-24 rounded-full bg-neutral-300 md:w-36 dark:bg-foreground/30" />
+                    <div className="h-1.5 w-16 rounded-full bg-neutral-200 md:w-24 dark:bg-foreground/20" />
+                  </div>
+                </div>
+
+                <div className="flex-shrink-0">
+                  <Button type="button" size="sm" className="pointer-events-none w-32">
+                    <Trans>Sign</Trans>
+                  </Button>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );

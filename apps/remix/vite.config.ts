@@ -34,6 +34,7 @@ export default defineConfig({
     },
   },
   server: {
+    host: process.env.HOST || '0.0.0.0',
     port: parseInt(process.env.PORT || '3000', 10),
     strictPort: true,
   },
@@ -85,9 +86,17 @@ export default defineConfig({
   },
   optimizeDeps: {
     entries: ['./app/**/*', '../../packages/ui/**/*', '../../packages/lib/**/*'],
-    include: ['prop-types', 'file-selector', 'attr-accept'],
+    include: [
+      'prop-types',
+      'file-selector',
+      'attr-accept',
+      'lucide-react',
+      'framer-motion',
+      'date-fns',
+      '@tanstack/react-table',
+      '@tanstack/react-query',
+    ],
     exclude: [
-      'node_modules',
       '@napi-rs/canvas',
       '@node-rs/bcrypt',
       'sharp',
